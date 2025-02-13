@@ -7,8 +7,7 @@ import java.time.LocalDate;
 public record UserCreateRequest (
 
         @NotNull
-                @Min(4)
-                @Max(4)
+                @Max(9999)
                 @Positive
         Integer pin,
 
@@ -21,6 +20,9 @@ public record UserCreateRequest (
 
         @NotBlank
         String password,
+
+        @NotBlank
+        String ConfirmedPassword,
 
         @NotBlank
                 @Size(max = 10)

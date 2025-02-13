@@ -81,7 +81,6 @@ public class User {
     private LocalDateTime createdAt;
 
     private boolean isStudent;
-    private boolean isDeleted;
     private boolean isBlocked;
-
+    private boolean isDeleted;
 }
