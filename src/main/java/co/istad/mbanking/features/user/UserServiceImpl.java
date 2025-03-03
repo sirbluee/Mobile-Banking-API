@@ -10,6 +10,8 @@ import co.istad.mbanking.features.user.dto.UserUpdateRequest;
 import co.istad.mbanking.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -144,12 +146,15 @@ public class UserServiceImpl implements UserService{
 
     }
 
+    // get all users with pagination
     @Override
-    public List<UserResponse> findList() {
+    public Page<UserResponse> findList(int page, int limit) {
 
-        List<User> users = userRepository.findAll();
+        PageRequest pageRequest = PageRequest.of(page, limit);
 
-        return userMapper.toUserResponseList(users);
+        Page<User> users = userRepository.findAll(pageRequest);
+
+        return users.map(userMapper::toUserResponse);
     }
 
 }

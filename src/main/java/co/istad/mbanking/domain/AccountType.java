@@ -21,11 +21,15 @@ public class AccountType {
     @Column(unique = true, nullable = false, length = 50)
     private String name;
 
+    private String alias;
+
     @Column(columnDefinition = "TEXT")
     private String description;
 
     private boolean isDeleted;
 
+
     @OneToMany(mappedBy = "accountType")
     private List<Account> accountList;
+
 }

@@ -5,8 +5,7 @@ import co.istad.mbanking.features.user.dto.UserCreateRequest;
 import co.istad.mbanking.features.user.dto.UserDetailsReponse;
 import co.istad.mbanking.features.user.dto.UserResponse;
 import co.istad.mbanking.features.user.dto.UserUpdateRequest;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
 
 public interface UserService{
 
@@ -20,5 +19,5 @@ public interface UserService{
 
     void deleteByUuid(String uuid);
 
-    List<UserResponse> findList();
+    Page<UserResponse> findList(int page, int limit);
 }

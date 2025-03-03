@@ -7,10 +7,9 @@ import co.istad.mbanking.features.user.dto.UserResponse;
 import co.istad.mbanking.features.user.dto.UserUpdateRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -19,11 +18,12 @@ public class UserController {
 
     private final UserService userService;
 
-    // get all users
+    // get all users with pagination
     @GetMapping
-    List<UserResponse> findList() {
+    Page<UserResponse> findList(@RequestParam(required = false, defaultValue = "0") int page,
+                                @RequestParam(required = false, defaultValue = "2") int limit) {
 
-        return userService.findList();
+        return userService.findList(page, limit);
     }
 
     // create new user
