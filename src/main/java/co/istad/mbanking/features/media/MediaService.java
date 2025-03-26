@@ -13,4 +13,6 @@ public interface MediaService {
     List<MediaResponse> uploadMultiple(List<MultipartFile> files, String folderName);
 
     MediaResponse loadMediaByName(@RequestParam String name, String folderName);
+
+    MediaResponse deleteMediaByName(String id, String folderName);
 }

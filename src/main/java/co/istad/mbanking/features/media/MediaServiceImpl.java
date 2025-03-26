@@ -106,4 +106,10 @@ public class MediaServiceImpl implements MediaService {
                     e.getLocalizedMessage());
         }
     }
+
+    // delete media
+    @Override
+    public MediaResponse deleteMediaByName(String id, String folderName) {
+        return null;
+    }
 }
