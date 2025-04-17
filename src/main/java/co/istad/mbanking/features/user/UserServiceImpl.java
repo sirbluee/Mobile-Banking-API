@@ -30,7 +30,6 @@ public class UserServiceImpl implements UserService{
     private final UserMapper userMapper;
     private final RoleRepository roleRepository;
 
-
     //    private final UserService userService;
     @Override
     public void createNew(UserCreateRequest userCreateRequest) {

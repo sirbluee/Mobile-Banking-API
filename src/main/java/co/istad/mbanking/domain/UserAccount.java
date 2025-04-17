@@ -21,10 +21,10 @@ public class UserAccount {
     @ManyToOne
     private User user;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private Account account;
 
     private boolean isDeleted;
+    private boolean isBlocked;
     private LocalDateTime createdAt;
-
 }

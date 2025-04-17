@@ -30,5 +30,4 @@ public class EmailVerificationToken {
 
     @OneToOne
     private User user;
-
 }

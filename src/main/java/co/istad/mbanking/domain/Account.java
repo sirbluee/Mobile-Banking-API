@@ -20,7 +20,7 @@ public class Account {
     private Integer id;
 
     @Column(nullable = false, unique = true, length = 9)
-    private String actNumber;
+    private String actNo;
 
     @Column(nullable = false, length = 50, unique = true)
     private  String actName;
@@ -31,6 +31,7 @@ public class Account {
     @Column(nullable = false)
     private BigDecimal balance;
 
+    @Column(nullable = false)
     private BigDecimal transferLimit;
 
     // account has type
