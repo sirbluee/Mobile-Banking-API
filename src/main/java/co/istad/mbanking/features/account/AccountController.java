@@ -1,6 +1,7 @@
 package co.istad.mbanking.features.account;
 
 import co.istad.mbanking.features.account.dto.AccountCreateRequest;
+import co.istad.mbanking.features.account.dto.AccountRenameRequest;
 import co.istad.mbanking.features.account.dto.AccountResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 public class AccountController {
 
     private final AccountService accountService;
+    private final AccountRepository accountRepository;
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
@@ -24,5 +26,12 @@ public class AccountController {
     @GetMapping("/{actNo}")
     AccountResponse findByActNo(@PathVariable String actNo) {
         return accountService.findByActNo(actNo);
+    }
+
+    // rename
+    @PutMapping("/{actNo}/rename")
+    AccountResponse renameByActNo(@Valid @PathVariable String actNo, @Valid @RequestBody AccountRenameRequest accountRenameRequest) {
+
+        return accountService.renameByActNo(actNo, accountRenameRequest);
     }
 }

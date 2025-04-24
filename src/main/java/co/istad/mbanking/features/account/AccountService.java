@@ -11,5 +11,4 @@ public interface AccountService {
     AccountResponse findByActNo(String actNo);
 
     AccountResponse renameByActNo(String actNo, AccountRenameRequest accountRenameRequest);
-
 }

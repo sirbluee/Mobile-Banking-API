@@ -1,6 +1,7 @@
 package co.istad.mbanking.mapper;
 
 import co.istad.mbanking.domain.Account;
+import co.istad.mbanking.domain.AccountType;
 import co.istad.mbanking.domain.User;
 import co.istad.mbanking.domain.UserAccount;
 import co.istad.mbanking.features.account.dto.AccountCreateRequest;
@@ -12,7 +13,9 @@ import org.mapstruct.Named;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = {
+        UserMapper.class, AccountType.class
+})
 public interface AccountMapper {
 
     Account fromAccountCreateRequestToAccount(AccountCreateRequest accountCreateRequest);

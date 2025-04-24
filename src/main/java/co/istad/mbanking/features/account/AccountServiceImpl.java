@@ -56,7 +56,6 @@ public class AccountServiceImpl implements AccountService {
 
         userAccountRepository.save(userAccount);
     }
-
     // find account by actNo
     @Override
     public AccountResponse findByActNo(String actNo) {
@@ -67,7 +66,7 @@ public class AccountServiceImpl implements AccountService {
                         HttpStatus.NOT_FOUND,
                         "Account doesn't exist"
                 ));
-
+        log.info("Account found with act no {}", actNo);
         return accountMapper.toAccountResponse(account);
     }
 
@@ -78,6 +77,15 @@ public class AccountServiceImpl implements AccountService {
         // check actNo is exit
         Account account = accountRepository.findByActNo(actNo)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Account Not Found"));
-        return null;
+
+        // check old and alias
+        if (account.getActName().equals(accountRenameRequest.newName())){
+            throw new ResponseStatusException(HttpStatus.CONFLICT,
+                    "New Name must not be the same old Name");
+        }
+        account.setActName(accountRenameRequest.newName());
+        account =  accountRepository.save(account);
+        log.info("Account renamed with name {}", accountRenameRequest.newName());
+        return accountMapper.toAccountResponse(account);
     }
 }
