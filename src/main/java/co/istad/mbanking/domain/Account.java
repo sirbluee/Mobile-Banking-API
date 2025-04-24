@@ -22,7 +22,7 @@ public class Account {
     @Column(nullable = false, unique = true, length = 9)
     private String actNo;
 
-    @Column(nullable = false, length = 50, unique = true)
+    @Column(nullable = false, length = 50)
     private  String actName;
 
     @Column(nullable = false)

@@ -5,6 +5,7 @@ import co.istad.mbanking.features.account.dto.AccountRenameRequest;
 import co.istad.mbanking.features.account.dto.AccountResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,5 +34,20 @@ public class AccountController {
     AccountResponse renameByActNo(@Valid @PathVariable String actNo, @Valid @RequestBody AccountRenameRequest accountRenameRequest) {
 
         return accountService.renameByActNo(actNo, accountRenameRequest);
+    }
+
+    // hide account by actNo
+    @PutMapping("/{actNo}/hide")
+    void hideAccountByActNo(@Valid @PathVariable String actNo) {
+        accountService.hideAccount(actNo);
+    }
+
+    // get all accounts
+    @GetMapping
+    Page<AccountResponse> findAllAccounts(
+            @RequestParam (required = false, defaultValue = "0")int page,
+            @RequestParam (required = false, defaultValue = "25") int size
+    ) {
+        return accountService.findAllAccounts(page, size);
     }
 }

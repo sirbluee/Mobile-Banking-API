@@ -10,14 +10,20 @@ import co.istad.mbanking.features.accountype.AccountTypeRepository;
 import co.istad.mbanking.features.user.UserRepository;
 import co.istad.mbanking.mapper.AccountMapper;
 import co.istad.mbanking.features.account.dto.AccountResponse;
+import co.istad.mbanking.util.RandomUtil;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +35,7 @@ public class AccountServiceImpl implements AccountService {
     private final AccountTypeRepository accountTypeRepository;
     private final AccountRepository accountRepository;
     private  final UserRepository userRepository;
+
     @Override
     public void createNew(AccountCreateRequest accountCreateRequest) {
         // check account type
@@ -44,7 +51,7 @@ public class AccountServiceImpl implements AccountService {
         account.setAccountType(accountType);
         account.setActName(user.getName());
         account.setTransferLimit(BigDecimal.valueOf(5000));
-        account.setActNo("123456789");
+        account.setActNo(RandomUtil.generateRandom9Digits());
         account.setHidden(false);
 
         UserAccount userAccount = new UserAccount();
@@ -87,5 +94,42 @@ public class AccountServiceImpl implements AccountService {
         account =  accountRepository.save(account);
         log.info("Account renamed with name {}", accountRenameRequest.newName());
         return accountMapper.toAccountResponse(account);
+    }
+
+    @Override
+    @Transactional
+    public void hideAccount(String actNo) {
+        if (!accountRepository.existsByActNo(actNo)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Account Not Found");
+        }
+        try {
+            // FIXED: No need to call through interface
+            accountRepository.hideAccountByActNo(actNo);
+        } catch (Exception e) {
+            throw new ResponseStatusException(
+                    HttpStatus.INTERNAL_SERVER_ERROR,
+                    "Something went wrong while hiding account"
+            );
+        }
+        log.info("Account hidden with name {}", actNo);
+    }
+
+    // list all account
+    @Override
+    public Page<AccountResponse> findAllAccounts(int page, int size) {
+        //validate
+        if (page < 0){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Page Number Must Be Positive");
+        }
+        if (size < 1) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Size must be greater than zero");
+        }
+
+        Sort sortByActName = Sort.by(Sort.Direction.ASC, "ActName");
+        PageRequest pageRequest = PageRequest.of(page, size, sortByActName);
+
+        Page<Account>  accounts= accountRepository.findAll(pageRequest);
+        return accounts.map(accountMapper::toAccountResponse);
     }
 }
